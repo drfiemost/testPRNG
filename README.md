@@ -1,4 +1,4 @@
-# A PRNG comparison [WiP]
+# A quest for a fast and decent PRNG [WiP]
 
 *A quick comparison of simple and fast psudo-random number generators*
 
@@ -14,7 +14,7 @@ The algorithms considered are the following:
 
 ## Output
 
-As a first check we just dump a thousands of numbers produced by the generators and plot then on a graph to see if they look random. Weird thing is that the Lemire output doesn't seem random at all but shows a pattern repeating every ~50 data. The others look quite good, sufficiently resembling white noise.
+As a first check we just dump a thousand of numbers in the range [0,100) produced by the generators and plot then on a graph to see if they look random. Weird thing is that the Lemire output doesn't seem random at all but shows a pattern repeating every ~50 data. The others look quite good, sufficiently resembling white noise.
 
 ![Output of the Lemire generator](images/Lemire_dump.png)
 ![Output of the xorshift16 generator](images/xorshift16_dump.png)
@@ -24,16 +24,19 @@ As a first check we just dump a thousands of numbers produced by the generators 
 
 ## Distribution
 
-The second check is based on an answer on stackoverflow [4] and is aimed at measuring the bias of the distribution. We produce ten million numbers in the range [0,100) and count the occurences of each one. The Lemire generator uses rejection to eliminate the bias. The other methods use a simple modulo but for such small ranges there is no noticeable issue.
+The second check is based on an answer on stackoverflow [4] and is aimed at measuring the bias of the distribution. We produce ten million numbers, again in the range [0,100), and count the occurences of each one.
+The Lemire generator uses rejection to eliminate the bias, while for the other methods I've used a simple modulo, but for such small ranges there is no noticeable issue.
 
 ![Distribution of the Lemire generator](images/Lemire_distribution.png)
 ![Distribution of the xorshift16 generator](images/xorshift16_distribution.png)
 ![Distribution of the LCG generator](images/LCG_distribution.png)
 ![Distribution of the standard generator](images/standard_distribution.png)
 
-Zooming in the xorgshift graph we can notice a jump around the value 35:
+Zooming in the xorgshift graph we can notice a wide jump around the value 35:
 
 ![Distribution of the xorshift16 generator](images/xorshift16_distribution_zoomed.png)
+
+[_TODO: even applying rejection the result is the same, what's going on? Is the distribution not uniform?_]
 
 
 ## Timings

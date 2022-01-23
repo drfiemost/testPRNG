@@ -5,6 +5,8 @@
 #include <chrono>
 #include <string>
 
+//#define UNBIASED
+
 // generate numbers in the range [0, MAX_VALUE)
 constexpr int MAX_VALUE = 100;
 
@@ -94,12 +96,25 @@ private:
 public:
     void seed(uint32_t s) override { x = static_cast<uint16_t>(s); }
 
-    int random(int max) override { return (xorshift16() - 1) % max; }
+    int random(int max) override {
+#ifdef UNBIASED
+        // Debiased Modulo — Java's Method
+        // https://www.pcg-random.org/posts/bounded-rands.html
+        uint32_t x, r; // NOTE using uint16_t makes it slower
+        do {
+            x = xorshift16() - 1;
+            r = x % max;
+        } while (x - r  > (-max));
+        return r;
+#else
+        return (xorshift16() - 1) % max;
+#endif
+    }
 };
 
 // Linear congruential generator
 class lcg : public randomGenerator {
-    
+
 private:
     uint32_t fast_rand_seed_val;
 
@@ -112,12 +127,23 @@ private:
 public:
     void seed(uint32_t s) override { fast_rand_seed_val = s; }
 
-    int random(int max) override { return fast_rand() % max; }
+    int random(int max) override {
+#ifdef UNBIASED
+        uint32_t x, r;
+        do {
+            x = fast_rand();
+            r = x % max;
+        } while (x - r  > (-max));
+        return r;
+#else
+        return fast_rand() % max;
+#endif
+    }
 };
 
 // C random generator
 class standard : public randomGenerator {
-    
+
 public:
     void seed(uint32_t s) override { srand(s); }
 
@@ -130,7 +156,7 @@ void Distribution(randomGenerator* rand, std::string name) {
     std::array<int, MAX_VALUE> buckets;
     buckets.fill(0);
 
-    rand->seed(0x12345678);
+    rand->seed(0x87654321);
 
     Timer t;
     for (int i=0; i<10000000; i++) {
@@ -148,7 +174,7 @@ void Distribution(randomGenerator* rand, std::string name) {
 
 void Dump(randomGenerator* rand, std::string name) {
 
-    rand->seed(0x87654321);
+    rand->seed(0x12345678);
 
     std::ofstream outfile;
     outfile.open (name+"_dump.csv");
