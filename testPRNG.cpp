@@ -137,12 +137,12 @@ void Distribution(randomGenerator* rand, std::string name) {
         int rnd = rand->random(MAX_VALUE);
         buckets[rnd]++;
     }
-    std::cout << name << ": time elapsed: " << t.elapsed() << " seconds" << std::endl;
+    std::cout << name << ", time elapsed: " << t.elapsed() << " seconds" << std::endl;
 
     std::ofstream outfile;
     outfile.open (name+"_distribution.csv");
     for (int i = 0; i < MAX_VALUE; i++)
-        outfile << i << "," << buckets[i] << std::endl;
+        outfile << buckets[i] << std::endl;
     outfile.close();
 }
 
