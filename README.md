@@ -36,7 +36,7 @@ Zooming in the xorgshift graph we can notice a wide jump around the value 35:
 
 ![Distribution of the xorshift16 generator](images/xorshift16_distribution_zoomed.png)
 
-[_TODO: even applying rejection the result is the same, what's going on? Is the distribution not uniform?_]
+In fact it is known that xorgshift exhibit weakness in the low-order bits and using the upper part of a 32 bit generator gives much better results at a slight cost in performance.
 
 
 ## Timings
@@ -50,9 +50,15 @@ xorshift16: time elapsed: 0.0659807 seconds
 LCG: time elapsed: 0.0535795 seconds
 standard: time elapsed: 0.332941 seconds
 ```
-
 The test program has been compiled with gcc version 10.3.1 using the "-O3" flag and run on an AMD FX(tm)-6300
 
+Here are more results using gcc version 11.2.0 on an Intel(R) Core(TM) i7-8565U CPU
+```
+Lemire, time elapsed: 0.0240596 seconds
+xorshift16, time elapsed: 0.0324585 seconds
+LCG, time elapsed: 0.0291749 seconds
+standard, time elapsed: 0.143582 seconds
+```
 
 ## Conclusions
 
