@@ -32,11 +32,11 @@ The Lemire generator uses rejection to eliminate the bias, while for the other m
 ![Distribution of the LCG generator](images/LCG_distribution.png)
 ![Distribution of the standard generator](images/standard_distribution.png)
 
-Zooming in the xorgshift graph we can notice a wide jump around the value 35:
+Zooming in the xorshift graph we can notice a wide jump around the value 35:
 
 ![Distribution of the xorshift16 generator](images/xorshift16_distribution_zoomed.png)
 
-In fact it is known that xorgshift exhibit weakness in the low-order bits and using the upper part of a 32 bit generator gives much better results at a slight cost in performance.
+In fact it is known that xorshift exhibit weakness in the low-order bits and using the upper part of a 32 bit generator gives much better results at a slight cost in performance.
 
 
 ## Timings
